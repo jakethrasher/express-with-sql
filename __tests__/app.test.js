@@ -135,6 +135,92 @@ describe('app routes', () => {
         .expect(200);
 
       expect(data.body).toEqual(expectation);
-    });
+    });  
+
+    test('creates record and adds to db', async() => {
+
+      const newRecord = {
+
+        artist:'black box',
+        album:'dreamland',
+        image_url: 'http://placekitten.com/200/300',
+        condition:'very good',
+        category:'electronic',
+        price: 25,
+
+      }; 
+      const expectation = {
+        ...newRecord,
+        id:8,
+        owner_id:1
+      };
+      
+      const data = await fakeRequest(app)
+        .post('/records')
+        .send(newRecord)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(data.body).toEqual(expectation);
+
+      const allRecords = await fakeRequest(app)
+        .get('/records')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      const foundRecord = allRecords.body.find(item=> item.artist === 'black box');
+      
+      expect(foundRecord).toEqual(expectation);
+    });  
+    test('creates record and adds to db', async() => {
+      const expectation = {
+        id: 8,
+        artist: 'black box',
+        album: 'dreamland',
+        image_url: 'http://placekitten.com/200/300',
+        condition: 'very good',
+        category: 'electronic',
+        price: 25,
+        owner_id: 1
+      };
+
+
+      const data = await fakeRequest(app)
+        .delete('/records/8')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(data.body).toEqual(expectation);
+      
+      const emptyRow = await fakeRequest(app)
+        .get('/records/8')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(emptyRow.body).toEqual('');
+    });  
+    
+    test('updates a record', async() => {
+
+      const expectation = {
+        id: 7,
+        artist:'adonis',
+        album:'No Way Back - Single',
+        image_url: 'https://img.discogs.com/f8YFlFg6TF7RNfinsilma5hXOy4=/fit-in/300x300/filters:strip_icc():format(jpeg):mode_rgb():quality(40)/discogs-images/R-27332-1231412285.jpeg.jpg',
+        condition:'Near Mint',
+        category:'90\'s electronic',
+        price: 25,
+        owner_id:1
+      }; 
+      
+      const data = await fakeRequest(app)
+        .put('/records/7')
+        .send(expectation)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(data.body).toEqual(expectation);
+
+    }); 
   });
 });
