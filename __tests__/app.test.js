@@ -172,7 +172,7 @@ describe('app routes', () => {
       
       expect(foundRecord).toEqual(expectation);
     });  
-    test('creates record and adds to db', async() => {
+    test('removes a record from db', async() => {
       const expectation = {
         id: 8,
         artist: 'black box',
