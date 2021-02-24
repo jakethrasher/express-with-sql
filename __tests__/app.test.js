@@ -180,10 +180,11 @@ describe('app routes', () => {
         .expect('Content-Type', /json/)
         .expect(200);
 
-      const foundRecord = allRecords.body.find(item => item.artist === 'black box');
+      const foundRecord = allRecords.body.some(item => item.artist === 'black box');
 
-      expect(foundRecord).toEqual({ ...expectation, name:'house' });
+      expect(foundRecord).toEqual(true);
     });
+    
     test('removes a record from db', async() => {
       const expectation = {
         id: 8,
