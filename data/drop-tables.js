@@ -11,6 +11,7 @@ async function run() {
     await client.query(`
             DROP TABLE IF EXISTS users CASCADE;
             DROP TABLE IF EXISTS records;
+            DROP TABLE IF EXISTS categories
         `);
 
     console.log(' drop tables complete', getEmoji(), getEmoji(), getEmoji());
